@@ -1,0 +1,9 @@
+# Build artifacts
+build/
+
+# VSCode editor settings
+.vscode/
+
+# Compiled object files
+*.o
+*.exe

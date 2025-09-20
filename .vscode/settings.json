@@ -1,8 +1,0 @@
-{
-    "files.associations": {
-        "circular_buffer.h": "c",
-        "algorithm": "c",
-        "limits": "c",
-        "stddef.h": "c"
-    }
-}
