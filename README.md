@@ -1,136 +1,68 @@
 # Circular Buffer
 
-### Instructions and requirements
+## Overview
 
-- You must link your project as a submodule within your forked copy of the repository
+This project implements a fixed-size integer ring buffer in C.
+The buffer supports the following operations:
 
-- Your code must be modular. You must write header files for each source file you write. You must also keep source files in a subdirectory called `src` and header files in a subdirectory called `inc`.
+- `cb_init(size)` – initialize a buffer with given size.
+- `cb_push(value)` – add a value to the buffer.
+- `cb_pop()` – remove and return the oldest value from the buffer.
+- `cb_peek()` – view the oldest value without removing it.
+- `cb_is_empty()` / `cb_is_full()` – check buffer state.
 
-- This goes without saying, but you may only use the C language.
+The buffer uses an internal array with head/tail indexing to support wraparound.
+The project includes a **test harness** (`main.c`) that shows the functionality.
 
-  - If you so choose, you may use inline assembly. This is optional.
-  - You must have comments. Minimum 1 multi-line comment per function.
+---
 
-- You must use the _Make_ build system and you must write your own `makefile`. Requirements for build system:
+## Directory Structure
 
-  - It must place build output files in a subdirectory called `build`.
-  - It should support `make clean`, which cleans the `build` folder.
-  - It should support `make run`, which runs the built executable.
-
-- Create a GitHub Actions workflow in `.github/workflows/build.yml`. Your workflow must:
-
-  - Run on `ubuntu-latest`
-
-  - Perform the following:
-
-  - Checkout the repository
-
-  - Initialize and update submodules
-
-  - Run make and confirm a clean build
-
-  - (Optional bonus) Run make run and check for expected output
-
-- You must have a minimum of 7 **well-named, significant** commits. If you think your project can be finished under 7 commits, it is not hard enough.
-
-  - Pull requests for merging features on branches is not required.
-  - Commit naming convention as outlined [here](https://www.conventionalcommits.org/en/v1.0.0/#summary)
-  - Pull request naming convention as outlined [here](https://github.com/mozilla-mobile/firefox-ios/wiki/Pull-Request-Naming-Guide)
-    - PRs are optional, but follow this naming convention outside of this tutorial, too.
-
-- Create a `README.md` that aptly describes what your project does. Your `README.md` must also contain **all** of the following:
-
-  - A directory tree: use the `tree` command line tool
-  - A short explanation of each module
-
-- If you need help, I have created an example project that satisfies all of the conditions (except module explanations and comments). View it [here](https://github.com/wxkim/julia).
-
-  - Note: Your project should be significantly **less** complex than the example.
-
-- Finally, your project must work. It should build, and functionality error should be minimal, if not zero.
-  - You do not have to make this project cross-platform.
-
-## Goal: Implement a fixed-size integer ring buffer
-
-## Required Features:
-
-Buffer must support the following functions:
-
-```C
-cb_init(size)
-
-cb_push(val)
-
-cb_pop()
-
-cb_peek()
-
-cb_is_empty() / cb_is_full()
+```
+C:.
+│   .gitignore
+│   LICENSE
+│   Makefile
+│   README.md
+│
+├───github
+│   └───workflows
+│           build.yml
+│
+├───inc
+│       circular_buffer.h
+│
+└───src
+        circular_buffer.c
+        main.c
 ```
 
-Internally use an array + head/tail tracking
+#### `inc/circular_buffer.h`
+- Declares the public API for the circular buffer.  
+- Contains function prototypes, the `circular_buffer_t` type, and comments explaining each function.
 
-Must support wraparound indexing
+#### `src/circular_buffer.c`
+- Implements all buffer operations: `push`, `pop`, `peek`, `is_empty`, `is_full`.  
+- Handles wraparound and overwrites the buffer when full.  
 
-Optional bonus: Implement buffer overwrite-on-full behavior
+#### `src/main.c`
+- Test harness demonstrating the circular buffer.  
+- Pushes and pops values, prints the internal buffer state, and verifies full/empty.
 
-## Test Harness:
+#### `Makefile`
+- Builds the project into the `build/` folder.  
+- Supports `make all`, `make run`, and `make clean`.
 
-Write a main.c that:
+---
 
-- Initializes the buffer
+### Build and Run Instructions
 
-- Pushes several values
+```bash
+# Compile the project
+make all
 
-- Pops them in order and prints
+# Run the executable
+make run
 
-- Asserts proper full/empty behavior
-
-Use print statements to show internal behavior as well.
-
-### Instructions and requirements that apply to all projects:
-
-- You must link your project as a submodule within your forked copy of the repository
-
-- Your code must be modular. You must write header files for each source file you write. You must also keep source files in a subdirectory called `src` and header files in a subdirectory called `inc`.
-
-- This goes without saying, but you may only use the C language.
-
-  - If you so choose, you may use inline assembly. This is optional.
-  - You must have comments. Minimum 1 multi-line comment per function.
-
-- You must use the _Make_ build system and you must write your own `makefile`. Requirements for build system:
-
-  - It must place build output files in a subdirectory called `build`.
-  - It should support `make clean`, which cleans the `build` folder.
-  - It should support `make run`, which runs the built executable.
-
-- Create a GitHub Actions workflow in `.github/workflows/build.yml`. Your workflow must:
-
-  - Run on `ubuntu-latest`
-
-  - Perform the following:
-
-  - Checkout the repository
-
-  - Initialize and update submodules
-
-  - Run make and confirm a clean build
-
-  - (Optional bonus) Run make run and check for expected output
-
-- You must have a minimum of 7 **well-named, significant** commits. If you think your project can be finished under 7 commits, it is not hard enough.
-
-  - Pull requests for merging features on branches is not required.
-
-- Create a `README.md` that aptly describes what your project does. Your `README.md` must also contain **all** of the following:
-
-  - A directory tree: use the `tree` command line tool
-  - A short explanation of each module
-
-- If you need help, I have created an example project that satisfies all of the conditions (except module explanations and comments). View it [here](https://github.com/wxkim/julia).
-
-  - Note: Your project should be significantly **less** complex than the example.
-
-- Finally, your project must work. It should build, and functionality error should be minimal, if not zero.
-  - You do not have to make this project cross-platform.
+# Remove build artifacts
+make clean
