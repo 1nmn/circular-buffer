@@ -14,8 +14,10 @@ int main(void)
     // Push 1 to 5 into the buffer
     printf("\nPushing values 1 to 5 into the buffer\n");
     for (int i = 1; i <= 5; i++)
-        if (cb_push(cb, i) != 0)
-            printf("Failed to push %d\n", i);
+    {
+        assert(cb_push(cb, i) == 0);
+        printf("Pushed: %d\n", i);
+    }
 
     // Peek at the oldest value
     int val;
@@ -27,27 +29,30 @@ int main(void)
     printf("\nBuffer is full: %s\n", cb_is_full(cb) ? "true" : "false");
 
     // Push another element, which should overwrite the oldest
-    cb_push(cb, 6);
+    assert(cb_push(cb, 6) == 0);
     printf("\nPushed 6, overwriting oldest element\n");
 
     // Peek at the oldest value
-    cb_peek(cb, &val);
+    assert(cb_peek(cb, &val) == 0 && val == 2);
     printf("\nPeeking at oldest value: %d\n", val);
 
     // Pop all elements and print them
     printf("\nPopping elements:\n");
-    while (!cb_is_empty(cb))
-        if (cb_pop(cb, &val) != 0)
-            printf("Failed to pop element\n");
-        else
-            printf("%d\n", val);
+    int expected[] = {2, 3, 4, 5, 6};
+    for (int i = 0; i < 5; i++)
+    {
+        assert(cb_pop(cb, &val) == 0);
+        assert(val == expected[i]);
+        printf("Popped: %d\n", val);
+    }
 
     // Buffer should be empty now
     assert(cb_is_empty(cb));
     printf("\nBuffer is empty: %s\n", cb_is_empty(cb) ? "true" : "false");
 
     // Peek into empty buffer
-    printf("\nFailed to peek: %s\n", cb_peek(cb, &val) == -1 ? "true" : "false");
+    assert(cb_peek(cb, &val) == -1);
+    printf("\nFailed to peek: %s\n", (cb_peek(cb, &val) == -1) ? "true" : "false");
 
     // Free the buffer
     cb_free(cb);
