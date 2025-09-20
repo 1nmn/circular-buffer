@@ -21,7 +21,7 @@ int main(void)
 
     // Peek at the oldest value
     int val;
-    cb_peek(cb, &val);
+    assert(cb_peek(cb, &val) == 0);
     printf("\nPeeking at oldest value: %d\n", val);
 
     // Buffer should be full now
@@ -51,10 +51,21 @@ int main(void)
     printf("\nBuffer is empty: %s\n", cb_is_empty(cb) ? "true" : "false");
 
     // Peek into empty buffer
-    assert(cb_peek(cb, &val) == -1);
-    printf("\nFailed to peek: %s\n", (cb_peek(cb, &val) == -1) ? "true" : "false");
+    int peek = cb_peek(cb, &val);
+    assert(peek == -1);
+    printf("Peek into empty buffer returned: %d\n", peek);
+
+    // Pop from empty buffer
+    int pop = cb_pop(cb, &val);
+    assert(pop == -1);
+    printf("Pop from empty buffer returned: %d\n", pop);
+
+
 
     // Free the buffer
     cb_free(cb);
+
+    printf("\nAll tests passed!\n");
+    
     return 0;
 }

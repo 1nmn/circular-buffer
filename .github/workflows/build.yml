@@ -42,7 +42,7 @@ jobs:
           set -e
           OUTPUT=$(make run)
           echo "$OUTPUT"
-          if echo "$OUTPUT" | grep -q "Circular Buffer Test:"; then
+          if echo "$OUTPUT" | grep -q "All tests passed!"; then
             echo "Tests passed"
           else
             echo "Tests failed"
